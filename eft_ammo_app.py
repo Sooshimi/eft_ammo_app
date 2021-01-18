@@ -15,6 +15,8 @@ size_df = ammo_df["Size"].unique()
 #filtering by size
 ammo_df[ammo_df["Size"] == "12 Gauge Shot"]
 
+print(size_df)
+
 ########################## KIVY GUI #################################
 
 # class TestApp(App):
