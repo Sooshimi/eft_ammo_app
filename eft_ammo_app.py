@@ -12,7 +12,8 @@ ammo_df = pd.read_csv("ammo.csv")
 #all unique ammo sizes
 size_df = ammo_df["Size"].unique()
 
-g_shot_12 = ammo_df[ammo_df["Size"] == "12 Gauge Shot"]
+#filtering by size
+ammo_df[ammo_df["Size"] == "12 Gauge Shot"]
 
 ########################## KIVY GUI #################################
 
