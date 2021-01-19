@@ -39,13 +39,12 @@ driver.get("https://tarkov-market.com/tag/ammo")
 # Get current scroll height
 last_height = driver.execute_script("return document.body.scrollHeight")
 
-scroll_pause_time = 0.5
 while True:
     # Script to scroll down to bottom of page
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     # Wait to load page
-    time.sleep(scroll_pause_time)
+    time.sleep(0.5)
 
     # Calculate new scroll height and compare with last scroll height
     new_height = driver.execute_script("return document.body.scrollHeight")
@@ -75,6 +74,9 @@ for key, value in ammo_list.items():
     print(key)
 
 #replace all ammo_list dict keys with refs (refer to csv)
-ammo_list["12x70 shell with .50 BMG bullet"] = 15
-ammo_list["9x19 mm PSO gzh"] = 52
-ammo_list["12/70 Dual Sabot Slug"] = 14
+ammo_list[15] = ammo_list.pop('12x70 shell with .50 BMG bullet')
+ammo_list[52] = ammo_list.pop('9x19 mm PSO gzh')
+ammo_list[14] = ammo_list.pop('12/70 Dual Sabot Slug')
+ammo_list[75] = ammo_list.pop('4.6x30mm Subsonic SX')
+
+ammo_df["Price"] = ammo_df["Ref"].apply(lambda x: ammo_list.get(x))
