@@ -1,10 +1,5 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import pymongo
-import seaborn as sb
-import numpy as np
 import time
-import re
 from bs4 import BeautifulSoup as soup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -33,8 +28,8 @@ def handle(find):
 PATH = "C:\Program Files (x86)\chromedriver.exe" #path of local chromedrive
 options = Options()
 options.headless = True #headless chromedriver
-driver = webdriver.Chrome(PATH, options=options)
-driver.get("https://tarkov-market.com/tag/ammo")
+driver = webdriver.Chrome(PATH, options=options) #starts webdriver
+driver.get("https://tarkov-market.com/tag/ammo") #opens url
 
 # Get current scroll height
 last_height = driver.execute_script("return document.body.scrollHeight")
@@ -46,7 +41,7 @@ while True:
     # Wait to load page
     time.sleep(0.5)
 
-    # Calculate new scroll height and compare with last scroll height
+    # gets new scroll height and compare with last scroll height
     new_height = driver.execute_script("return document.body.scrollHeight")
     if new_height == last_height:
         break
@@ -66,17 +61,39 @@ ammo_list = {} # {name:price}
 for item in items:
     temp = {}
     name = handle(item.find("span", {"class": "name"}))
-    price = handle(item.find("span",{"class": "price-main"}))
+    price = handle(item.find("span", {"class": "price-main"}))
     temp[name] = price
     ammo_list.update(temp)
 
 for key, value in ammo_list.items():
     print(key)
 
-#replace all ammo_list dict keys with refs (refer to csv)
-ammo_list[15] = ammo_list.pop('12x70 shell with .50 BMG bullet')
-ammo_list[52] = ammo_list.pop('9x19 mm PSO gzh')
+#replace all ammo_list dict keys with refs (refer to ammo.csv)
+ammo_list[1] = ammo_list.pop('12/70 5.25mm Buckshot')
+ammo_list[7] = ammo_list.pop('12/70 HP Slug "SuperFormance"')
+ammo_list[8] = ammo_list.pop('12/70 Grizzly 40 Slug')
+ammo_list[12] = ammo_list.pop('12/70 "Poleva-3" Slug')
 ammo_list[14] = ammo_list.pop('12/70 Dual Sabot Slug')
+ammo_list[15] = ammo_list.pop('12x70 shell with .50 BMG bullet')
+ammo_list[20] = ammo_list.pop('20/70 7.3mm Buckshot')
+ammo_list[21] = ammo_list.pop('20/70 Devastator Slug')
+ammo_list[22] = ammo_list.pop('20/70 Slug "Poleva-3"')
+ammo_list[28] = ammo_list.pop('23x75mm "Barricade"')
+ammo_list[37] = ammo_list.pop('9x18 mm PM PPT gzh')
+ammo_list[41] = ammo_list.pop('9x18 mm PM PMM')
+ammo_list[44] = ammo_list.pop('7.62x25mm TT LRN')
+ammo_list[51] = ammo_list.pop('9x19 mm QuakeMaker')
+ammo_list[52] = ammo_list.pop('9x19 mm PSO gzh')
+ammo_list[59] = ammo_list.pop('.45 ACP Hydra-Shok')
+ammo_list[60] = ammo_list.pop('.45 ACP Lasermatch FMJ')
+ammo_list[61] = ammo_list.pop('.45 ACP FMJ')
+ammo_list[65] = ammo_list.pop('9x21 mm SP10')
+ammo_list[74] = ammo_list.pop('4.6x30mm Action SX')
 ammo_list[75] = ammo_list.pop('4.6x30mm Subsonic SX')
+ammo_list[102] = ammo_list.pop('5.56x45 mm 55 FMJ')
+ammo_list[107] = ammo_list.pop('7.62x39 mm HP')
+ammo_list[109] = ammo_list.pop('7.62x39 mm T45M')
+ammo_list[133] = ammo_list.pop('.338 Lapua Magnum AP')
 
+#add dict values (prices) to new df column 'Price', on key values
 ammo_df["Price"] = ammo_df["Ref"].apply(lambda x: ammo_list.get(x))
