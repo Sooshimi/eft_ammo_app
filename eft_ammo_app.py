@@ -5,7 +5,11 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 pd.set_option('display.max_columns', None)
-ammo_df = pd.read_csv("ammo.csv")
+
+try:
+    ammo_df = pd.read_csv("ammo.csv")
+except:
+    print("'ammo.csv' not in this python file's directory")
 
 #all unique ammo sizes
 size_df = ammo_df["Size"].unique()
@@ -68,19 +72,49 @@ for item in items:
 for key, value in ammo_list.items():
     print(key)
 
-#replace all ammo_list dict keys with refs (refer to ammo.csv)
+#replace all ammo_list dict keys with ref numbers (refer to ammo.csv)
 ammo_list[1] = ammo_list.pop('12/70 5.25mm Buckshot')
+ammo_list[2] = ammo_list.pop('12/70 8.5 mm "Magnum" Buckshot')
+ammo_list[3] = ammo_list.pop('12x70 6.5 mm "Express" Buckshot')
+ammo_list[4] = ammo_list.pop('12x70 7mm Buckshot')
+ammo_list[5] = ammo_list.pop('12/70 Flechette')
+ammo_list[6] = ammo_list.pop('9x19 mm RIP')
 ammo_list[7] = ammo_list.pop('12/70 HP Slug "SuperFormance"')
 ammo_list[8] = ammo_list.pop('12/70 Grizzly 40 Slug')
+ammo_list[9] = ammo_list.pop('12/70 HP Slug Copper Sabot Premier')
+ammo_list[10] = ammo_list.pop('12x70 Led slug')
+ammo_list[11] = ammo_list.pop('12/70 Dual Sabot Slug')
 ammo_list[12] = ammo_list.pop('12/70 "Poleva-3" Slug')
+ammo_list[13] = ammo_list.pop('12/70 FTX Custom LIte Slug')
 ammo_list[14] = ammo_list.pop('12/70 Dual Sabot Slug')
 ammo_list[15] = ammo_list.pop('12x70 shell with .50 BMG bullet')
+ammo_list[16] = ammo_list.pop('12/70 AP-20 Slug')
+ammo_list[17] = ammo_list.pop('20/70 5.6mm Buckshot')
+ammo_list[18] = ammo_list.pop('20/70 6.2mm Buckshot')
+ammo_list[19] = ammo_list.pop('20x70 7.5mm Buckshot')
 ammo_list[20] = ammo_list.pop('20/70 7.3mm Buckshot')
 ammo_list[21] = ammo_list.pop('20/70 Devastator Slug')
 ammo_list[22] = ammo_list.pop('20/70 Slug "Poleva-3"')
+ammo_list[23] = ammo_list.pop('20/70 Star Slug')
+ammo_list[24] = ammo_list.pop('12/70 "Poleva-6u" Slug')
+ammo_list[25] = ammo_list.pop('23x75mm "Star"')
+ammo_list[26] = ammo_list.pop('23x75mm Shrapnel-25')
+ammo_list[27] = ammo_list.pop('23x75mm Shrapnel 10')
 ammo_list[28] = ammo_list.pop('23x75mm "Barricade"')
+ammo_list[29] = ammo_list.pop('9x18 mm PM SP8 gzh')
+ammo_list[30] = ammo_list.pop('9x18 mm PM SP7 gzh')
+ammo_list[31] = ammo_list.pop('9x18 mm PM PSV')
+ammo_list[32] = ammo_list.pop('9x18 mm PM 9 P gzh')
+ammo_list[33] = ammo_list.pop('9x19 mm PSO gzh')
+ammo_list[34] = ammo_list.pop('9x18 mm PM PS gs PPO')
+ammo_list[35] = ammo_list.pop('9x18 mm PM PRS gs')
+ammo_list[36] = ammo_list.pop('9x18 mm PM PPe gzh')
 ammo_list[37] = ammo_list.pop('9x18 mm PM PPT gzh')
+ammo_list[38] = ammo_list.pop('9x18 mm PM Pst gzh')
+ammo_list[39] = ammo_list.pop('9x18mm PM RG028 gzh')
+ammo_list[40] = ammo_list.pop('9x18 mm PM 9 BZT gzh')
 ammo_list[41] = ammo_list.pop('9x18 mm PM PMM')
+
 ammo_list[44] = ammo_list.pop('7.62x25mm TT LRN')
 ammo_list[51] = ammo_list.pop('9x19 mm QuakeMaker')
 ammo_list[52] = ammo_list.pop('9x19 mm PSO gzh')
