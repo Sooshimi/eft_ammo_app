@@ -13,15 +13,6 @@ try:
 except:
     print("'ammo.csv' not in this python file's directory")
 
-#all unique ammo sizes
-size_df = ammo_df["Size"].unique()
-
-#all unique ammo types
-type_df = ammo_df["Ammo Type"].unique()
-
-#filtering by size
-ammo_df[ammo_df["Size"] == "12 Gauge Shot"]
-
 # function to handle below AttributeError, and gets text and strips extra spaces
 # AttributeError: 'NoneType' object has no attribute 'html'
 def handle(find):
@@ -232,6 +223,8 @@ ammo_list[137] = ammo_list.pop('40x46 mm M576(MP-APERS)')
 #add dict values (prices) to new df column 'Price', on key values
 ammo_df["Price"] = ammo_df["Ref"].apply(lambda x: ammo_list.get(x))
 
+ammo_df = ammo_df.drop(columns=["Ref","Ref2"])
+
 class MyApp(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
@@ -265,19 +258,50 @@ class MyApp(tk.Frame):
         self.create_button(self.f3, "5.56x45mm", 2, 0, "nw", 5, 0)
         self.create_button(self.f3, "5.7x28mm", 3, 0, "nw", 5, (0,11))
         self.create_button(self.f3, "7.62x25mm", 4, 0, "nw", 5, 0)
-        self.create_button(self.f3, "5.7x39mm", 5, 0, "nw", 5, 0)
-        self.create_button(self.f3, "5.7x54mm", 6, 0, "nw", 5, 0)
-        self.create_button(self.f3, "5.7x54R", 7, 0, "nw", 5, (0,11))
+        self.create_button(self.f3, "7.62x39mm", 5, 0, "nw", 5, 0)
+        self.create_button(self.f3, "7.62x51mm", 6, 0, "nw", 5, 0)
+        self.create_button(self.f3, "7.62x54R", 7, 0, "nw", 5, (0,11))
         self.create_button(self.f3, "23x75mm", 8, 0, "nw", 5, (0, 11))
         self.create_button(self.f3, "12.7x55mm", 9, 0, "nw", 5, (0, 11))
         self.create_button(self.f3, "300 BLK", 10, 0, "nw", 5, 0)
 
+        self.tree()
+
+    def create_button(self, master, text="", row=0, col=0, sticky="nw", padx=0, pady=0, colspan=1, width=16):
+        self.master = master
+        self.button = ttk.Button(master, text=text, width=width, command=lambda text=text: self.click(text))
+        self.button.grid(row=row, column=col, sticky=sticky, padx=padx, pady=pady, columnspan=colspan)
+
+    def click(self, text):
+        if text == "0.388":
+            text = ".338 Lapua Magnum"
+
+        self.tree.delete(*self.tree.get_children())
+        self.df_rows = ammo_df[ammo_df["Size"] == text].to_numpy().tolist()
+        for row in self.df_rows:
+            self.tree.insert("", "end", values=row)
+
+    def tree(self):
         self.tree = ttk.Treeview()
         self.tree["column"] = list(ammo_df.columns)
         self.tree["show"] = "headings"
+
         for col in self.tree["column"]:
             self.tree.heading(col, text=col)
-            self.tree.column(col, width=60)
+            width = 50
+            if col == "Size":
+                width = 90
+            elif col == "Ammo Type":
+                width = 160
+            elif col == "Damage":
+                width = 60
+            elif col == "Pen Value":
+                width = 60
+            elif col == "Armor Damage %":
+                width = 110
+            elif col == "Frag. Chance*":
+                width = 100
+            self.tree.column(col, width=width, anchor="n")
 
         self.df_rows = ammo_df.to_numpy().tolist()
         for row in self.df_rows:
@@ -285,14 +309,9 @@ class MyApp(tk.Frame):
 
         self.tree.grid(row=1, column=4, sticky="nw", padx=5, pady=5)
 
-    def create_button(self, master, text="", row=0, col=0, sticky="nw", padx=0, pady=0, colspan=1, width=16):
-        self.master = master
-        self.button = ttk.Button(master,text=text, width=width)
-        self.button.grid(row=row, column=col, sticky=sticky, padx=padx, pady=pady, columnspan=colspan)
-
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Snackbox")
-    root.geometry("1000x600")
+    root.geometry("1200x400")
     app = MyApp(master=root)
     app.mainloop()
