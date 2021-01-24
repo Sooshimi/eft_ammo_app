@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import tkinter as tk
 from tkinter import ttk
+from matplotlib import pyplot as plt
 
 pd.set_option('display.max_columns', None)
 
@@ -265,10 +266,14 @@ class MyApp(tk.Frame):
         self.create_button(self.f3, "12.7x55mm", 9, 0, "nw", 5, (0, 11))
         self.create_button(self.f3, "300 BLK", 10, 0, "nw", 5, 0)
 
+        self.f4 = ttk.Frame(master)
+        self.f4.grid(row=0, column=1, sticky="nw", padx=5, pady=5, columnspan=1)
+
     def create_button(self, master, text="", row=0, col=0, sticky="nw", padx=0, pady=0, colspan=1, width=16):
         self.master = master
         self.button = ttk.Button(master, text=text, width=width)
         self.button.grid(row=row, column=col, sticky=sticky, padx=padx, pady=pady, columnspan=colspan)
+
 
 if __name__ == "__main__":
     root = tk.Tk()
