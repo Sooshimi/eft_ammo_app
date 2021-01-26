@@ -3,9 +3,12 @@ import time
 from bs4 import BeautifulSoup as soup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
 import tkinter as tk
 from tkinter import ttk
-from matplotlib import pyplot as plt
 
 pd.set_option('display.max_columns', None)
 
@@ -25,7 +28,7 @@ def handle(find):
 
 PATH = "C:\Program Files (x86)\chromedriver.exe" #path of local chromedrive
 options = Options()
-options.headless = True #headless chromedriver
+# options.headless = True #headless chromedriver
 driver = webdriver.Chrome(PATH, options=options) #starts webdriver
 driver.get("https://tarkov-market.com/tag/ammo") #opens url
 
@@ -34,6 +37,11 @@ last_height = driver.execute_script("return document.body.scrollHeight")
 
 while True:
     # Script to scroll down to bottom of page
+    try:
+        myElem = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'theme-dark')))
+    except TimeoutException:
+        print("Page loading error")
+
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     # Wait to load page
@@ -294,7 +302,7 @@ class MyApp(tk.Frame):
         self.create_table()
 
     def create_table(self):
-        head_count = 0;
+        head_count = 0
         for col in self.df.columns:
             self.header = ttk.Label(self.f4, text=col)  # table headers
             self.header.grid(row=0, column=head_count, sticky="nw", padx=5, pady=5)
