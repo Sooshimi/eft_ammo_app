@@ -37,7 +37,7 @@ while True:
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     # Wait to load page
-    time.sleep(1)
+    time.sleep(1.2)
 
     # gets new scroll height and compare with last scroll height
     new_height = driver.execute_script("return document.body.scrollHeight")
@@ -232,6 +232,7 @@ class MyApp(tk.Frame):
         self.master = master
         # self.s = ttk.Style()
         # self.s.theme_use('alt')
+        self.df = ammo_df[ammo_df["Size"] == "12 Gauge Shot"]
 
         self.f1 = ttk.Frame(master)
         self.f1.grid(row=0, column=1, sticky="nw", padx=5, pady=5, columnspan=2)
@@ -267,27 +268,55 @@ class MyApp(tk.Frame):
         self.create_button(self.f3, "300 BLK", 10, 0, "nw", 5, 0)
 
         self.f4 = ttk.Frame(master)
-        self.f4.grid(row=0, column=4, sticky="nw", padx=5, pady=5)
-        self.table()
+        self.f4.grid(row=0, column=4, sticky="nw", padx=5, pady=5, rowspan=200)
+        self.create_table()
 
     def create_button(self, master, text="", row=0, col=0, sticky="nw", padx=0, pady=0, colspan=1, width=16):
         self.master = master
-        self.button = ttk.Button(master, text=text, width=width)
+        self.button = ttk.Button(master, text=text, width=width, command=lambda text=text: self.click(text))
         self.button.grid(row=row, column=col, sticky=sticky, padx=padx, pady=pady, columnspan=colspan)
 
-    def table(self):
-        self.df = ammo_df[ammo_df["Size"]=="12 Gauge Shot"]
+    def clear_frame(self):
+        for widget in self.f4.winfo_children():
+            widget.destroy()
+        self.f4.pack_forget()
+
+    def click(self, text):
+        if text == "0.388":
+            text = ".338 Lapua Magnum"
+        self.df = ammo_df[ammo_df["Size"] == text]
+        if text == "All":
+            self.df = ammo_df
+        self.update_table()
+
+    def update_table(self):
+        self.clear_frame()
+        self.create_table()
+
+    def create_table(self):
+        head_count = 0;
+        for col in self.df.columns:
+            self.header = ttk.Label(self.f4, text=col)  # table headers
+            self.header.grid(row=0, column=head_count, sticky="nw", padx=5, pady=5)
+            head_count += 1
 
         for index in self.df.index:
             col_count = 0
             for col in self.df.columns:
-                print(self.df[col][index])
+                self.label = ttk.Label(self.f4, text=self.df[col][index]) #table body for ammo data
+                self.label["background"] = None
+                if 6 <= col_count < len(self.df.columns)-1:
+                    self.label["width"] = 5
+                    self.data = int(self.label["text"])
+                    if self.data == 0:
+                        self.label["background"] = "red"
+                    if self.data > 4:
+                        self.label["background"] = "green"
+                    elif self.data > 0:
+                        self.label["background"] = "orange"
 
-                self.label = ttk.Label(self.f4, text=col)
-                self.label.grid(row=0, column=col_count, sticky="nw", padx=5, pady=5)
+                self.label.grid(row=index + 1, column=col_count, sticky="nw", padx=5, pady=5)
 
-                self.label = ttk.Label(self.f4, text=self.df[col][index])
-                self.label.grid(row=index+1, column=col_count, sticky="nw", padx=5, pady=5)
                 col_count += 1
 
 if __name__ == "__main__":
