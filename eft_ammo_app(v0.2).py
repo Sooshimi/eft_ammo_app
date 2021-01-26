@@ -267,13 +267,28 @@ class MyApp(tk.Frame):
         self.create_button(self.f3, "300 BLK", 10, 0, "nw", 5, 0)
 
         self.f4 = ttk.Frame(master)
-        self.f4.grid(row=0, column=1, sticky="nw", padx=5, pady=5, columnspan=1)
+        self.f4.grid(row=0, column=4, sticky="nw", padx=5, pady=5)
+        self.table()
 
     def create_button(self, master, text="", row=0, col=0, sticky="nw", padx=0, pady=0, colspan=1, width=16):
         self.master = master
         self.button = ttk.Button(master, text=text, width=width)
         self.button.grid(row=row, column=col, sticky=sticky, padx=padx, pady=pady, columnspan=colspan)
 
+    def table(self):
+        self.df = ammo_df[ammo_df["Size"]=="12 Gauge Shot"]
+
+        for index in self.df.index:
+            col_count = 0
+            for col in self.df.columns:
+                print(self.df[col][index])
+
+                self.label = ttk.Label(self.f4, text=col)
+                self.label.grid(row=0, column=col_count, sticky="nw", padx=5, pady=5)
+
+                self.label = ttk.Label(self.f4, text=self.df[col][index])
+                self.label.grid(row=index+1, column=col_count, sticky="nw", padx=5, pady=5)
+                col_count += 1
 
 if __name__ == "__main__":
     root = tk.Tk()
