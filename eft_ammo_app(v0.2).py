@@ -37,15 +37,15 @@ last_height = driver.execute_script("return document.body.scrollHeight")
 
 while True:
     # Script to scroll down to bottom of page
-    try:
-        myElem = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'theme-dark')))
-    except TimeoutException:
-        print("Page loading error")
+    # try:
+    #     myElem = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'theme-dark')))
+    # except TimeoutException:
+    #     print("Page loading error")
 
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     # Wait to load page
-    time.sleep(1.2)
+    time.sleep(1)
 
     # gets new scroll height and compare with last scroll height
     new_height = driver.execute_script("return document.body.scrollHeight")
